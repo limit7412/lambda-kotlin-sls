@@ -1,4 +1,8 @@
+import lambda.*
 
 fun main() {
-  println("音無小鳥すき")
+  hander("test", { event ->
+    println("音無小鳥すき")
+    event
+  })
 }
