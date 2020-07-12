@@ -1,8 +1,11 @@
-import lambda.*
+import aws.Lambda
 
 fun main() {
-  hander("test", { event ->
+  println("大石泉すき")
+
+  val lambda = Lambda()
+  lambda.Hander("hello", { event ->
     println("音無小鳥すき")
-    event
+    println(event)
   })
 }
