@@ -1,11 +1,13 @@
 import aws.Lambda
 
 fun main() {
-  println("大石泉すき")
-
-  val lambda = Lambda()
-  lambda.Hander("hello", { event ->
-    println("音無小鳥すき")
-    println(event)
-  })
+  Lambda()
+    .Hander("hello", { event ->
+      println("大石泉すき")
+      println(event)
+    })
+    .Hander("world", { event ->
+      println("音無小鳥すき")
+      println(event)
+    })
 }
