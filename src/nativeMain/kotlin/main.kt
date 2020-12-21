@@ -1,3 +1,13 @@
+import aws.Lambda
+
 fun main() {
-    println("Hello, Kotlin/Native!")
+  Lambda()
+    .Hander("hello", { event ->
+      println("大石泉すき")
+      println(event)
+    })
+    .Hander("world", { event ->
+      println("音無小鳥すき")
+      println(event)
+    })
 }
