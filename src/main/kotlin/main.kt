@@ -1,9 +1,11 @@
-import aws.Lambda
+import runtime.serverless.Lambda
 
 fun main() {
   Lambda()
-    .Hander("hello", { event ->
+    .handler("hello") { event ->
       println("音無小鳥すき")
       println(event)
-    })
+
+      ""
+    }
 }

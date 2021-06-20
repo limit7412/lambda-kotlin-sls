@@ -1,3 +1,2 @@
-
-rootProject.name = "lambda-kotlin-sls"
+rootProject.name = "bootstrap"
 
