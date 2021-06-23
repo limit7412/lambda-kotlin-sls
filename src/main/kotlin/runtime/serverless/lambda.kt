@@ -1,7 +1,7 @@
 package runtime.serverless
 
 class Lambda {
-    fun handler(name: String, callback: (event: String) -> String): Lambda {
+  fun handler(name: String, callback: (event: String) -> String): Lambda {
 //    if (name == getenv("_HANDLER").toString()) {
 //      return this
 //    }
@@ -19,7 +19,7 @@ class Lambda {
 //      val requestID = response.headers["lambda-runtime-aws-request-id"]
 //
 //      try {
-        callback(name)
+    callback(name)
 //        val result = callback(eventData)
 //        client.post("http://$api/2018-06-01/runtime/invocation/$requestID/response")
 //      } catch (e: Exception) {
@@ -27,6 +27,6 @@ class Lambda {
 //      }
 //    }
 
-      return this
-    }
+    return this
+  }
 }
