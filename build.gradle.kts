@@ -22,6 +22,7 @@ nativeImage {
   executableName = "bootstrap"
   outputDirectory = file("$buildDir/executable")
   arguments(
+    "--no-fallback",
     "--static",
     "--enable-https"
   )
