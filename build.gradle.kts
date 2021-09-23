@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
   implementation("org.slf4j:slf4j-simple:1.7.28")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0-RC")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
 }
 
 nativeImage {
