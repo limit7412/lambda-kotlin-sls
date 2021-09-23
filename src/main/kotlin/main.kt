@@ -21,7 +21,7 @@ fun main() {
           200,
           Json.encodeToString(
             SampleResponse(
-              "さよなら透明だった僕たち"
+              "繋ぐレインボー"
             )
           )
         )
@@ -36,7 +36,7 @@ fun main() {
           200,
           Json.encodeToString(
             SampleResponse(
-              "でしょうねミスター・サーバーレス ${Json.encodeToString(body)}"
+              "津軽レインボー ${Json.encodeToString(body)}"
             )
           )
         )
