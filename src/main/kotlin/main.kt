@@ -16,30 +16,29 @@ data class SampleResponse(val msg: String)
 fun main() {
   Lambda
     .handler("hello") {
-      Json.encodeToString(
-        Response(
-          200,
-          Json.encodeToString(
-            SampleResponse(
-              "繋ぐレインボー"
-            )
-          )
-        )
+      val responseBody = SampleResponse(
+        "繋ぐレインボー"
       )
+      val response = Response(
+        200,
+        "test"
+      )
+
+      "{\"test\": \"get\"}"
     }
     .handler("world") { event ->
-      val request = Json.decodeFromString<APIGatewayRequest>(event)
-      val body = Json.decodeFromString<SampleRequest>(request.body)
+//      val request = Json.decodeFromString<APIGatewayRequest>(event)
+//      val body = Json.decodeFromString<SampleRequest>(request.body)
 
-      Json.encodeToString(
-        Response(
-          200,
-          Json.encodeToString(
-            SampleResponse(
-              "津軽レインボー ${Json.encodeToString(body)}"
-            )
-          )
-        )
+      val responseBody = SampleResponse(
+//        "津軽レインボー ${Json.encodeToString(body)}"
+        "test"
       )
+      val response = Response(
+        200,
+        "test"
+      )
+
+      "{\"test\": \"post\"}"
     }
 }

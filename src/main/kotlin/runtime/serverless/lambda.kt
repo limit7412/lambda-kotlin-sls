@@ -37,18 +37,15 @@ object Lambda {
         val result = callback(response.body())
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
       } catch (e: Exception) {
-//        val response = ErrorResponse(
-//          "Internal Lambda Error",
-//          e.message ?: "no error message"
-//        )
-        val body =
-          Json.encodeToString(
-            Response(
-              500,
-              "Json.encodeToString(response)"
-            )
-          )
-        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", body)
+        val response = ErrorResponse(
+          "Internal Lambda Error",
+          e.message ?: "no error message"
+        )
+        val body = Response(
+          500,
+          "Json.encodeToString(response)"
+        )
+        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", "{\"test\": \"err\"}")
       }
     }
   }
