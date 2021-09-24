@@ -34,20 +34,20 @@ object Lambda {
       val requestID =
         response.headers().firstValue("Lambda-Runtime-Aws-Request-Id").get()
 
-      try {
+//      try {
         val result = callback(response.body())
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
-      } catch (e: Exception) {
-//        val response = ErrorResponse(
-//          "Internal Lambda Error",
-//          e.message ?: "no error message"
-//        )
-//        val body = Response(
-//          500,
-//          Json.encodeToString(response)
-//        )
-        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", "{\"test\": \"err\"}")
-      }
+//      } catch (e: Exception) {
+////        val response = ErrorResponse(
+////          "Internal Lambda Error",
+////          e.message ?: "no error message"
+////        )
+////        val body = Response(
+////          500,
+////          Json.encodeToString(response)
+////        )
+//        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", "{\"test\": \"err\"}")
+//      }
     }
   }
 }
