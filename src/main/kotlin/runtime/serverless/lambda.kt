@@ -14,10 +14,10 @@ data class APIGatewayRequest(
 )
 
 @Serializable
-class Response(val statusCode: Int = 0, val body: String)
+data class Response(val statusCode: Int = 0, val body: String)
 
 @Serializable
-class ErrorResponse(val msg: String, val error: String)
+data class ErrorResponse(val msg: String, val error: String)
 
 
 object Lambda {
