@@ -6,23 +6,23 @@ import runtime.serverless.APIGatewayRequest
 import runtime.serverless.Lambda
 import runtime.serverless.Response
 
-@Serializable
+//@Serializable
 data class SampleRequest(val msg: String, val test: Int)
 
-@Serializable
+//@Serializable
 data class SampleResponse(val msg: String)
 
 
 fun main() {
   Lambda
     .handler("hello") {
-      val responseBody = SampleResponse(
-        "繋ぐレインボー"
-      )
-      val response = Response(
-        200,
-        "test"
-      )
+//      val responseBody = SampleResponse(
+//        "繋ぐレインボー"
+//      )
+//      val response = Response(
+//        200,
+//        "test"
+//      )
 
       "{\"test\": \"get\"}"
     }
@@ -30,14 +30,14 @@ fun main() {
 //      val request = Json.decodeFromString<APIGatewayRequest>(event)
 //      val body = Json.decodeFromString<SampleRequest>(request.body)
 
-      val responseBody = SampleResponse(
-//        "津軽レインボー ${Json.encodeToString(body)}"
-        "test"
-      )
-      val response = Response(
-        200,
-        "test"
-      )
+//      val responseBody = SampleResponse(
+////        "津軽レインボー ${Json.encodeToString(body)}"
+//        "test"
+//      )
+//      val response = Response(
+//        200,
+//        "test"
+//      )
 
       "{\"test\": \"post\"}"
     }
