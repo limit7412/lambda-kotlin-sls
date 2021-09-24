@@ -23,6 +23,7 @@ nativeImage {
   arguments(
     "--no-fallback",
     "--static",
+    "--libc=musl",
     "--enable-https"
   )
 }
