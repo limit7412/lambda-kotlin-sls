@@ -7,10 +7,10 @@ import runtime.serverless.Lambda
 import runtime.serverless.Response
 
 @Serializable
-data class SampleRequest(val msg: String, val test: Int)
+class SampleRequest(val msg: String, val test: Int)
 
 @Serializable
-data class SampleResponse(val msg: String)
+class SampleResponse(val msg: String)
 
 
 fun main() {
