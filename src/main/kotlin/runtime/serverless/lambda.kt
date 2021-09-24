@@ -9,7 +9,7 @@ data class APIGatewayRequest(
   val body: String
 )
 
-//@Serializable
+@Serializable
 data class Response(val statusCode: Int = 0, val body: String)
 
 //@Serializable
@@ -39,7 +39,7 @@ object Lambda {
 //        )
 //        val body = Response(
 //          500,
-//          "Json.encodeToString(response)"
+//          Json.encodeToString(response)
 //        )
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", "{\"test\": \"err\"}")
       }
