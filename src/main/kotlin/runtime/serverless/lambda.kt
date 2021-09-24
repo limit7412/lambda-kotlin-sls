@@ -1,9 +1,5 @@
 package runtime.serverless
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-
 //@Serializable
 data class APIGatewayRequest(
   val resource: String,
@@ -22,7 +18,7 @@ data class ErrorResponse(val msg: String, val error: String)
 
 object Lambda {
   fun handler(name: String, callback: (event: String) -> String): Lambda {
-    if (name == System.getenv("_HANDLER")) {
+    if (name != System.getenv("_HANDLER")) {
       return this
     }
 
