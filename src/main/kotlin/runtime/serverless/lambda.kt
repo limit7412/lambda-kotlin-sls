@@ -42,11 +42,11 @@ object Lambda {
           "Internal Lambda Error",
           e.message ?: "no error message"
         )
-        val body = Response(
+        val response = Response(
           500,
-          Json.encodeToString(responseBody)
+          Json.encodeToString(responseBody) ?: "test"
         )
-        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", Json.encodeToString(body))
+        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", Json.encodeToString(response) ?: "test")
       }
     }
   }

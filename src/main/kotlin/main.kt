@@ -22,10 +22,10 @@ fun main() {
       )
       val response = Response(
         200,
-        Json.encodeToString(responseBody)
+        Json.encodeToString(responseBody) ?: "test"
       )
 
-      Json.encodeToString(response)
+      Json.encodeToString(response) ?: "test"
     }
     .handler("world") { event ->
       val request = Json.decodeFromString<APIGatewayRequest>(event)
@@ -36,9 +36,9 @@ fun main() {
       )
       val response = Response(
         200,
-        Json.encodeToString(responseBody)
+        Json.encodeToString(responseBody) ?: "test"
       )
 
-      Json.encodeToString(response)
+      Json.encodeToString(response) ?: "test"
     }
 }
