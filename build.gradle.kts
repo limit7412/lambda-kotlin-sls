@@ -1,8 +1,8 @@
 plugins {
   java
-  kotlin("jvm") version "1.5.10"
+  kotlin("jvm") version "1.5.20"
   id("org.mikeneck.graalvm-native-image") version "v1.4.0"
-  kotlin("plugin.serialization") version "1.5.30"
+  kotlin("plugin.serialization") version "1.5.20"
 }
 
 repositories {
@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
   implementation("org.slf4j:slf4j-simple:1.7.28")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0-RC")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
 }
 
 nativeImage {
