@@ -1,19 +1,13 @@
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import runtime.serverless.APIGatewayRequest
 import runtime.serverless.Lambda
 import runtime.serverless.Response
 
-@Serializable
 data class SampleRequest(val msg: String, val test: Int)
 
-@Serializable
 data class SampleResponse(val msg: String)
 
-@OptIn(ExperimentalSerializationApi::class)
 fun main() {
   Lambda
     .handler("hello") {
@@ -22,23 +16,24 @@ fun main() {
       )
       val response = Response(
         200,
-        Json.encodeToString(responseBody)
+        jacksonObjectMapper().writeValueAsString(responseBody)
       )
 
-      Json.encodeToString(response)
+      jacksonObjectMapper().writeValueAsString(response)
     }
     .handler("world") { event ->
-      val request = Json.decodeFromString<APIGatewayRequest>(event)
-      val body = Json.decodeFromString<SampleRequest>(request.body)
+      val mapper = jacksonObjectMapper()
+      val request = mapper.readValue<APIGatewayRequest>(event)
+      val body = mapper.readValue<SampleRequest>(request.body)
 
       val responseBody = SampleResponse(
-        "津軽レインボー ${Json.encodeToString(body)}"
+        "津軽レインボー ${jacksonObjectMapper().writeValueAsString(body)}"
       )
       val response = Response(
         200,
-        Json.encodeToString(responseBody)
+        jacksonObjectMapper().writeValueAsString(responseBody)
       )
 
-      Json.encodeToString(response)
+      jacksonObjectMapper().writeValueAsString(response)
     }
 }

@@ -1,11 +1,8 @@
 package runtime.serverless
 
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
-@Serializable
+
 data class APIGatewayRequest(
   val resource: String,
   val path: String,
@@ -14,15 +11,11 @@ data class APIGatewayRequest(
   val body: String
 )
 
-@Serializable
 data class Response(val statusCode: Int = 0, val body: String)
 
-@Serializable
 data class ErrorResponse(val msg: String, val error: String)
 
-
 object Lambda {
-  @OptIn(ExperimentalSerializationApi::class)
   fun handler(name: String, callback: (event: String) -> String): Lambda {
     if (name != System.getenv("_HANDLER")) {
       return this
@@ -43,11 +36,14 @@ object Lambda {
           "Internal Lambda Error",
           e.message ?: "no error message"
         )
-        val body = Response(
+        val response = Response(
           500,
-          Json.encodeToString(responseBody)
+          jacksonObjectMapper().writeValueAsString(responseBody)
         )
-        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", Json.encodeToString(body))
+        Http.Post(
+          "http://$api/2018-06-01/runtime/invocation/$requestID/error",
+          jacksonObjectMapper().writeValueAsString(response)
+        )
       }
     }
   }
