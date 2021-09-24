@@ -1,7 +1,7 @@
 package runtime.serverless
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -20,8 +20,9 @@ data class Response(val statusCode: Int = 0, val body: String)
 @Serializable
 data class ErrorResponse(val msg: String, val error: String)
 
-@ExperimentalSerializationApi
+
 object Lambda {
+  @OptIn(ExperimentalSerializationApi::class)
   fun handler(name: String, callback: (event: String) -> String): Lambda {
     if (name != System.getenv("_HANDLER")) {
       return this

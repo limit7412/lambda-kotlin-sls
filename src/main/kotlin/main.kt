@@ -13,7 +13,7 @@ data class SampleRequest(val msg: String, val test: Int)
 @Serializable
 data class SampleResponse(val msg: String)
 
-@ExperimentalSerializationApi
+@OptIn(ExperimentalSerializationApi::class)
 fun main() {
   Lambda
     .handler("hello") {
