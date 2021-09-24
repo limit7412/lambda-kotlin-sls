@@ -1,4 +1,6 @@
-FROM ghcr.io/graalvm/graalvm-ce:latest as build-image
+FROM findepi/graalvm:java11-native as build-image
+
+RUN apt-get -y install musl-tools
 
 WORKDIR /work
 COPY ./ ./

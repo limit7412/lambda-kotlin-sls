@@ -22,7 +22,8 @@ nativeImage {
   outputDirectory = file("$buildDir/executable")
   arguments(
     "--no-fallback",
-    "-H:+StaticExecutableWithDynamicLibC",
+    "--static",
+    "--libc=musl",
     "--enable-https"
   )
 }
