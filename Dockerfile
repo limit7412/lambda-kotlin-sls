@@ -6,7 +6,7 @@ COPY ./ ./
 RUN ./gradlew nativeImage
 RUN chmod +x ./build/executable/bootstrap
 
-FROM public.ecr.aws/lambda/provided:al2
+FROM public.ecr.aws/lambda/provided:alami
 
 COPY --from=build-image /work/build/executable/bootstrap /var/runtime/
 
