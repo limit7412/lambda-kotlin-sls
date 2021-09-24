@@ -1,10 +1,11 @@
 package runtime.serverless
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-//@Serializable
+@Serializable
 data class APIGatewayRequest(
   val resource: String,
   val path: String,
@@ -19,7 +20,7 @@ data class Response(val statusCode: Int = 0, val body: String)
 @Serializable
 data class ErrorResponse(val msg: String, val error: String)
 
-
+@ExperimentalSerializationApi
 object Lambda {
   fun handler(name: String, callback: (event: String) -> String): Lambda {
     if (name != System.getenv("_HANDLER")) {
@@ -37,14 +38,13 @@ object Lambda {
         val result = callback(response.body())
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
       } catch (e: Exception) {
-        val response = ErrorResponse(
+        val responseBody = ErrorResponse(
           "Internal Lambda Error",
           e.message ?: "no error message"
         )
-        val hoge = Json.encodeToString(response)
         val body = Response(
           500,
-          "test"
+          Json.encodeToString(responseBody)
         )
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/error", Json.encodeToString(body))
       }

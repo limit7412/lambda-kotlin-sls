@@ -1,3 +1,4 @@
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -12,7 +13,7 @@ data class SampleRequest(val msg: String, val test: Int)
 @Serializable
 data class SampleResponse(val msg: String)
 
-
+@ExperimentalSerializationApi
 fun main() {
   Lambda
     .handler("hello") {
