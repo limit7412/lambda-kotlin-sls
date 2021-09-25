@@ -2,6 +2,8 @@ FROM findepi/graalvm:java11-native as build-image
 
 ENV JAVA_HOME /graalvm
 RUN gu install native-image
+RUN apt-get -y update
+RUN apt-get -y install musl
 RUN apt-get -y install musl-tools
 
 WORKDIR /work
