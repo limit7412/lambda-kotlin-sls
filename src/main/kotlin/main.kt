@@ -18,10 +18,10 @@ fun main() {
     }
     .handler("world") { event ->
       val mapper = jacksonObjectMapper()
-      val reference = object : TypeReference<Map<String, String>>() {}
+      val reference = object : TypeReference<Map<String, Any>>() {}
 
       val request = mapper.readValue(event, reference)
-      val body = mapper.readValue(request["body"], reference)
+      val body = mapper.readValue(request["body"].toString(), reference)
 
       val bodyNode = JsonNodeFactory.instance.objectNode()
       bodyNode
