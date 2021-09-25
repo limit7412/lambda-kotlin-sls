@@ -6,6 +6,7 @@ RUN apt-get -y update
 RUN apt-get -y install musl
 RUN apt-get -y install musl-tools
 RUN apt-get -y install zlib1g-dev
+RUN apt-get -y install zstd
 
 WORKDIR /work
 COPY ./ ./
