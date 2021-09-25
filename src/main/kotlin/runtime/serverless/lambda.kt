@@ -1,7 +1,6 @@
 package runtime.serverless
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 
 data class APIGatewayRequest(
   val resource: String,
@@ -10,10 +9,6 @@ data class APIGatewayRequest(
   val headers: Map<String, String>,
   val body: String
 )
-
-data class Response(val statusCode: Int = 0, val body: String)
-
-data class ErrorResponse(val msg: String, val error: String)
 
 object Lambda {
   fun handler(name: String, callback: (event: String) -> String): Lambda {
@@ -32,18 +27,18 @@ object Lambda {
         val result = callback(response.body())
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
       } catch (e: Exception) {
-        val mapper = jacksonObjectMapper()
-        val responseBody = ErrorResponse(
-          "Internal Lambda Error",
-          e.message ?: "no error message"
-        )
-        val errResponse = Response(
-          500,
-          mapper.writeValueAsString(responseBody)
-        )
+        val bodyNode = JsonNodeFactory.instance.objectNode()
+        bodyNode
+          .put("msg", "Internal Lambda Error")
+          .put("error", e.message ?: "no error message")
+        val responseNode = JsonNodeFactory.instance.objectNode()
+        responseNode
+          .put("statusCode", 500)
+          .put("body", bodyNode.toString())
+
         Http.Post(
           "http://$api/2018-06-01/runtime/invocation/$requestID/error",
-          mapper.writeValueAsString(errResponse)
+          responseNode.toString()
         )
       }
     }
