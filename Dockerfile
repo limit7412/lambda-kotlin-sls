@@ -3,6 +3,7 @@ FROM findepi/graalvm:java11-native as build-image
 ENV JAVA_HOME /graalvm
 RUN gu install native-image
 
+RUN apt-get -y install wget
 RUN mkdir /build-lib
 RUN mkdir /work-lib
 
