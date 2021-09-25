@@ -1,10 +1,7 @@
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import runtime.serverless.APIGatewayRequest
 import runtime.serverless.Lambda
-
-data class SampleRequest(val msg: String, val test: Int)
 
 fun main() {
   Lambda
@@ -21,13 +18,14 @@ fun main() {
     }
     .handler("world") { event ->
       val mapper = jacksonObjectMapper()
-      val request = mapper.readValue<APIGatewayRequest>(event)
-      val body = mapper.readValue<SampleRequest>(request.body)
+      val reference = object : TypeReference<Map<String, String>>() {}
 
+      val request = mapper.readValue(event, reference)
+      val body = mapper.readValue(request["body"], reference)
 
       val bodyNode = JsonNodeFactory.instance.objectNode()
       bodyNode
-        .put("msg", "津軽レインボー ${mapper.writeValueAsString(body)}")
+        .put("msg", "津軽レインボー $body")
       val responseNode = JsonNodeFactory.instance.objectNode()
       responseNode
         .put("statusCode", 200)

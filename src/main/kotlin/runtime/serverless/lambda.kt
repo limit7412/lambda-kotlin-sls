@@ -2,14 +2,6 @@ package runtime.serverless
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 
-data class APIGatewayRequest(
-  val resource: String,
-  val path: String,
-  val httpMethod: String,
-  val headers: Map<String, String>,
-  val body: String
-)
-
 object Lambda {
   fun handler(name: String, callback: (event: String) -> String): Lambda {
     if (name != System.getenv("_HANDLER")) {
