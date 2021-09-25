@@ -14,7 +14,7 @@ dependencies {
 }
 
 nativeImage {
-//  graalVmHome = System.getenv("JAVA_HOME")
+  graalVmHome = System.getenv("JAVA_HOME")
   buildType { build ->
     build.executable(main = "MainKt")
   }
