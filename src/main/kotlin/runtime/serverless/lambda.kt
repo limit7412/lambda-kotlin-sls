@@ -1,5 +1,6 @@
 package runtime.serverless
 
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 
@@ -32,7 +33,8 @@ object Lambda {
         val result = callback(response.body())
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
       } catch (e: Exception) {
-        val mapper = jacksonObjectMapper()
+        var mapper = jacksonObjectMapper()
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
         val responseBody = ErrorResponse(
           "Internal Lambda Error",
           e.message ?: "no error message"

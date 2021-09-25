@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import runtime.serverless.APIGatewayRequest
@@ -11,7 +12,8 @@ data class SampleResponse(val msg: String)
 fun main() {
   Lambda
     .handler("hello") {
-      val mapper = jacksonObjectMapper()
+      var mapper = jacksonObjectMapper()
+      mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
       val responseBody = SampleResponse(
         "繋ぐレインボー"
       )
@@ -23,7 +25,8 @@ fun main() {
       mapper.writeValueAsString(response)
     }
     .handler("world") { event ->
-      val mapper = jacksonObjectMapper()
+      var mapper = jacksonObjectMapper()
+      mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
       val request = mapper.readValue<APIGatewayRequest>(event)
       val body = mapper.readValue<SampleRequest>(request.body)
 
