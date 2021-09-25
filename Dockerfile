@@ -4,6 +4,7 @@ ENV JAVA_HOME /graalvm
 RUN gu install native-image
 
 RUN apt-get -y install wget
+RUN apt-get -y install build-essential
 RUN mkdir /build-lib
 RUN mkdir /work-lib
 ENV PATH $PATH:/work-lib/bin
