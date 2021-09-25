@@ -11,15 +11,16 @@ data class SampleResponse(val msg: String)
 fun main() {
   Lambda
     .handler("hello") {
+      val mapper = jacksonObjectMapper()
       val responseBody = SampleResponse(
         "繋ぐレインボー"
       )
       val response = Response(
         200,
-        jacksonObjectMapper().writeValueAsString(responseBody)
+        mapper.writeValueAsString(responseBody)
       )
 
-      jacksonObjectMapper().writeValueAsString(response)
+      mapper.writeValueAsString(response)
     }
     .handler("world") { event ->
       val mapper = jacksonObjectMapper()
@@ -27,13 +28,13 @@ fun main() {
       val body = mapper.readValue<SampleRequest>(request.body)
 
       val responseBody = SampleResponse(
-        "津軽レインボー ${jacksonObjectMapper().writeValueAsString(body)}"
+        "津軽レインボー ${mapper.writeValueAsString(body)}"
       )
       val response = Response(
         200,
-        jacksonObjectMapper().writeValueAsString(responseBody)
+        mapper.writeValueAsString(responseBody)
       )
 
-      jacksonObjectMapper().writeValueAsString(response)
+      mapper.writeValueAsString(response)
     }
 }

@@ -32,17 +32,18 @@ object Lambda {
         val result = callback(response.body())
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
       } catch (e: Exception) {
+        val mapper = jacksonObjectMapper()
         val responseBody = ErrorResponse(
           "Internal Lambda Error",
           e.message ?: "no error message"
         )
         val errResponse = Response(
           500,
-          jacksonObjectMapper().writeValueAsString(responseBody)
+          mapper.writeValueAsString(responseBody)
         )
         Http.Post(
           "http://$api/2018-06-01/runtime/invocation/$requestID/error",
-          jacksonObjectMapper().writeValueAsString(errResponse)
+          mapper.writeValueAsString(errResponse)
         )
       }
     }
