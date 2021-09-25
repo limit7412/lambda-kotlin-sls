@@ -1,0 +1,17 @@
+
+.gradle/
+
+.idea/workspace.xml
+
+build/
+
+.serverless/
+
+.settings/
+
+.vscode/
+
+bin/
+.project
+
+.classpath
