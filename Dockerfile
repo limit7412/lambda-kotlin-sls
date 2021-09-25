@@ -6,6 +6,7 @@ RUN gu install native-image
 RUN apt-get -y install wget
 RUN mkdir /build-lib
 RUN mkdir /work-lib
+ENV PATH $PATH:/work-lib/bin
 
 WORKDIR /build-lib
 RUN wget http://www.musl-libc.org/releases/musl-1.2.0.tar.gz
@@ -14,7 +15,6 @@ WORKDIR /build-lib/musl-1.2.0
 RUN ./configure --disable-shared --prefix=/work-lib
 RUN make
 RUN make install
-ENV PATH $PATH:${RESULT_DIR}/bin
 
 WORKDIR /build-lib
 RUN wget http://zlib.net/zlib-1.2.11.tar.gz
