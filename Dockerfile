@@ -7,6 +7,8 @@ RUN apt-get -y install musl
 RUN apt-get -y install musl-tools
 RUN apt-get -y install zlib1g-dev
 RUN apt-get -y install zstd
+RUN apt-get -y install libz-dev
+RUN apt-get -y install lib32z1-dev
 
 WORKDIR /work
 COPY ./ ./
