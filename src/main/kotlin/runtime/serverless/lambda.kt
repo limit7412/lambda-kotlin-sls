@@ -27,6 +27,7 @@ object Lambda {
         val result = callback(response.body())
         Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
       } catch (e: Exception) {
+        println(e)
         val bodyNode = JsonNodeFactory.instance.objectNode()
         bodyNode
           .put("msg", "Internal Lambda Error")
