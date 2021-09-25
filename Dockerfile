@@ -13,6 +13,7 @@ WORKDIR /build-lib/musl-1.2.0
 RUN ./configure --disable-shared --prefix=/work-lib
 RUN make
 RUN make install
+ENV PATH $PATH:${RESULT_DIR}/bin
 
 WORKDIR /build-lib
 RUN wget http://zlib.net/zlib-1.2.11.tar.gz
