@@ -11,13 +11,13 @@ object Lambda {
     val api = System.getenv("AWS_LAMBDA_RUNTIME_API")
 
     while (true) {
-      val response = Http.Get("http://$api/2018-06-01/runtime/invocation/next")
+      val response = Http.get("http://$api/2018-06-01/runtime/invocation/next")
       val requestID =
         response.headers().firstValue("Lambda-Runtime-Aws-Request-Id").get()
 
       try {
         val result = callback(response.body())
-        Http.Post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
+        Http.post("http://$api/2018-06-01/runtime/invocation/$requestID/response", result)
       } catch (e: Exception) {
         println(e)
         val bodyNode = JsonNodeFactory.instance.objectNode()
@@ -29,7 +29,7 @@ object Lambda {
           .put("statusCode", 500)
           .put("body", bodyNode.toString())
 
-        Http.Post(
+        Http.post(
           "http://$api/2018-06-01/runtime/invocation/$requestID/error",
           responseNode.toString()
         )

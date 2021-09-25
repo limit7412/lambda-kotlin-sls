@@ -6,7 +6,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 object Http {
-  fun Get(url: String): HttpResponse<String> {
+  fun get(url: String): HttpResponse<String> {
     var request = HttpRequest
       .newBuilder()
       .uri(URI.create(url))
@@ -19,7 +19,7 @@ object Http {
     return response
   }
 
-  fun Post(url: String, body: String): HttpResponse<String> {
+  fun post(url: String, body: String): HttpResponse<String> {
     var request = HttpRequest
       .newBuilder()
       .uri(URI.create(url))
