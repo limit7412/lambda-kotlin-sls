@@ -3,8 +3,8 @@ FROM findepi/graalvm:java11-native as build-image
 ENV JAVA_HOME /graalvm
 RUN gu install native-image
 
-ARG BUILD_DIR /build-lib
-ARG WORK_DIR /work-lib
+ARG BUILD_DIR=/build-lib
+ARG WORK_DIR=/work-lib
 RUN apt-get -y install wget
 RUN apt-get -y install build-essential
 RUN mkdir ${BUILD_DIR}
