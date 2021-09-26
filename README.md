@@ -1,6 +1,6 @@
 # lambda-kotlin-sls
 
-自力でシングルバイナリなサーバーレスkotlin作ってみたやつ
+自力でシングルバイナリなサーバーレスkotlin作ってみたやつ by Graalvm
 
 要: Docker, Serverless Framework
 
