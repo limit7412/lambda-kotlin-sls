@@ -1,4 +1,4 @@
-FROM findepi/graalvm:java11-native as build-image
+FROM ghcr.io/graalvm/native-image:latest as build-image
 
 ENV JAVA_HOME /graalvm
 RUN gu install native-image
