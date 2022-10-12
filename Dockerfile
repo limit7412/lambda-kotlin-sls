@@ -1,4 +1,7 @@
-FROM ghcr.io/graalvm/native-image:latest as build-image
+FROM ghcr.io/graalvm/graalvm-ce:ol8-java11 as build-image
+# FROM ghcr.io/graalvm/native-image:latest as build-image
+
+RUN gu install native-image
 
 ARG BUILD_DIR=/build-lib
 ARG WORK_DIR=/work-lib
