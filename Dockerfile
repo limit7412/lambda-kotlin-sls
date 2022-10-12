@@ -7,8 +7,9 @@ ARG ZLIB_VERSION=1.2.12
 
 RUN microdnf install yum
 ENV LC_ALL C
-RUN yum install wget
-RUN yum install build-essential
+RUN yum -y install wget
+RUN yum -y groupinstall "Development Tools"
+RUN yum -y install kernel-devel kernel-headers
 RUN mkdir ${BUILD_DIR}
 RUN mkdir ${WORK_DIR}
 ENV PATH $PATH:${BUILD_DIR}/bin
