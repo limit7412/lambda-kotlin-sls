@@ -16,10 +16,10 @@ RUN mkdir ${WORK_DIR}
 ENV PATH $PATH:${BUILD_DIR}/bin
 
 WORKDIR ${WORK_DIR}
-ENV CC ${BUILD_DIR}/bin/gcc
-RUN curl -L -o musl.tar.gz https://more.musl.cc/${CC_VERSION}/x86_64-linux-musl/x86_64-linux-musl-native.tgz
-RUN tar -xvzf musl.tar.gz -C musl --strip-components 1
-RUN cp /usr/lib/gcc/x86_64-redhat-linux/8/libstdc++.a ${BUILD_DIR}/lib/
+ENV CC ${BUILD_DIR}/x86_64-linux-musl-native/lib/bin/gcc
+RUN wget https://more.musl.cc/${CC_VERSION}/x86_64-linux-musl/x86_64-linux-musl-native.tgz
+RUN tar -xvzf x86_64-linux-musl-native.tgz
+RUN cp /usr/lib/gcc/x86_64-redhat-linux/8/libstdc++.a ${BUILD_DIR}/x86_64-linux-musl-native/lib/
 
 WORKDIR ${WORK_DIR}
 RUN wget http://www.musl-libc.org/releases/musl-${MSUL_VERSION}.tar.gz
