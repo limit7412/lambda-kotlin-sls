@@ -6,6 +6,7 @@ ARG MSUL_VERSION=1.2.3
 ARG ZLIB_VERSION=1.2.12
 
 RUN microdnf install yum
+ENV LC_ALL C
 RUN yum install wget
 RUN yum install build-essential
 RUN mkdir ${BUILD_DIR}
