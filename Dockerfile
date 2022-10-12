@@ -1,5 +1,4 @@
 FROM ghcr.io/graalvm/graalvm-ce:ol8-java11 as build-image
-# FROM ghcr.io/graalvm/native-image:latest as build-image
 
 RUN gu install native-image
 
@@ -18,6 +17,7 @@ RUN mkdir ${WORK_DIR}
 ENV PATH $PATH:${BUILD_DIR}/bin
 
 WORKDIR ${WORK_DIR}
+ENV CC $BUILD_DIR/bin/gcc
 RUN wget http://www.musl-libc.org/releases/musl-${MSUL_VERSION}.tar.gz
 RUN tar xzvf musl-${MSUL_VERSION}.tar.gz
 WORKDIR ${WORK_DIR}/musl-${MSUL_VERSION}
