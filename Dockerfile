@@ -4,20 +4,24 @@ RUN gu install native-image
 
 ARG BUILD_DIR=/build-lib
 ARG WORK_DIR=/work-lib
-ARG MSUL_VERSION=1.2.0
+ARG CC_VERSION=11.2.1
+ARG MSUL_VERSION=1.2.3
 ARG ZLIB_VERSION=1.2.12
 
 RUN microdnf install yum
 ENV LC_ALL C
 RUN yum -y install wget
-RUN yum -y groupinstall "Development Tools"
-RUN yum -y install kernel-devel kernel-headers
 RUN mkdir ${BUILD_DIR}
 RUN mkdir ${WORK_DIR}
 ENV PATH $PATH:${BUILD_DIR}/bin
 
 WORKDIR ${WORK_DIR}
-ENV CC $BUILD_DIR/bin/gcc
+ENV CC ${BUILD_DIR}/bin/gcc
+RUN curl -L -o musl.tar.gz https://more.musl.cc/${CC_VERSION}/x86_64-linux-musl/x86_64-linux-musl-native.tgz
+RUN tar -xvzf musl.tar.gz -C musl --strip-components 1
+RUN cp /usr/lib/gcc/x86_64-redhat-linux/8/libstdc++.a ${BUILD_DIR}/lib/
+
+WORKDIR ${WORK_DIR}
 RUN wget http://www.musl-libc.org/releases/musl-${MSUL_VERSION}.tar.gz
 RUN tar xzvf musl-${MSUL_VERSION}.tar.gz
 WORKDIR ${WORK_DIR}/musl-${MSUL_VERSION}
