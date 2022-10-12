@@ -2,7 +2,7 @@ FROM ghcr.io/graalvm/native-image:latest as build-image
 
 ARG BUILD_DIR=/build-lib
 ARG WORK_DIR=/work-lib
-ARG MSUL_VERSION=1.2.3
+ARG MSUL_VERSION=1.2.0
 ARG ZLIB_VERSION=1.2.12
 
 RUN microdnf install yum
