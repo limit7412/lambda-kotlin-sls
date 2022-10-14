@@ -1,6 +1,6 @@
 plugins {
   java
-  kotlin("jvm") version "1.5.20"
+  kotlin("jvm") version "1.7.20"
   id("org.mikeneck.graalvm-native-image") version "v1.4.0"
 }
 
@@ -9,8 +9,8 @@ repositories {
 }
 
 dependencies {
-  implementation("org.slf4j:slf4j-simple:1.7.28")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
+  implementation("org.slf4j:slf4j-simple:2.0.3")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
 }
 
 nativeImage {
