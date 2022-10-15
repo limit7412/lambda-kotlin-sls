@@ -7,7 +7,7 @@ ARG BUILD_DIR=/build-lib
 ARG WORK_DIR=/work-lib
 ARG CC_VERSION=11.2.1
 ARG MSUL_VERSION=1.2.3
-ARG ZLIB_VERSION=1.2.12
+ARG ZLIB_VERSION=1.2.13
 
 RUN microdnf install yum
 ENV LC_ALL C
@@ -31,7 +31,7 @@ RUN make
 RUN make install
 
 WORKDIR ${WORK_DIR}
-RUN wget http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
+RUN wget https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 RUN tar xzvf zlib-${ZLIB_VERSION}.tar.gz
 WORKDIR ${WORK_DIR}/zlib-${ZLIB_VERSION}
 RUN ./configure --static --prefix=${BUILD_DIR}
