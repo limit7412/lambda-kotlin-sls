@@ -2,6 +2,7 @@ FROM ghcr.io/graalvm/graalvm-ce:ol8-java11 as build-image
 
 RUN gu install native-image
 
+ARG CC_DIR=/cc-lib
 ARG BUILD_DIR=/build-lib
 ARG WORK_DIR=/work-lib
 ARG CC_VERSION=11.2.1
@@ -11,19 +12,20 @@ ARG ZLIB_VERSION=1.2.12
 RUN microdnf install yum
 ENV LC_ALL C
 RUN yum -y install wget
+RUN mkdir ${CC_DIR}
 RUN mkdir ${BUILD_DIR}
 RUN mkdir ${WORK_DIR}
 ENV PATH $PATH:${BUILD_DIR}/bin
 
-WORKDIR ${WORK_DIR}
-ENV CC ${BUILD_DIR}/x86_64-linux-musl-native/lib/bin/gcc
+WORKDIR ${CC_DIR}
+ENV CC ${CC_DIR}/x86_64-linux-musl-native/bin/gcc
 RUN wget https://more.musl.cc/${CC_VERSION}/x86_64-linux-musl/x86_64-linux-musl-native.tgz
 RUN tar -xvzf x86_64-linux-musl-native.tgz
-RUN cp /usr/lib/gcc/x86_64-redhat-linux/8/libstdc++.a ${BUILD_DIR}/x86_64-linux-musl-native/lib/
+# RUN cp /usr/lib/gcc/x86_64-redhat-linux/8/libstdc++.a ${BUILD_DIR}/x86_64-linux-musl-native/lib/
 
 WORKDIR ${WORK_DIR}
 RUN wget http://www.musl-libc.org/releases/musl-${MSUL_VERSION}.tar.gz
-RUN tar xzvf musl-${MSUL_VERSION}.tar.gz
+RUN tar xzvf -${MSUL_VERSION}.tar.gz
 WORKDIR ${WORK_DIR}/musl-${MSUL_VERSION}
 RUN ./configure --disable-shared --prefix=${BUILD_DIR}
 RUN make
