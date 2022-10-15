@@ -13,7 +13,6 @@ RUN microdnf install yum
 ENV LC_ALL C
 RUN yum -y install wget
 RUN mkdir ${CC_DIR}
-ENV PATH $PATH:${CC_DIR}/bin
 RUN mkdir ${BUILD_DIR}
 RUN mkdir ${WORK_DIR}
 ENV PATH $PATH:${BUILD_DIR}/bin
@@ -22,7 +21,6 @@ WORKDIR ${CC_DIR}
 ENV CC ${CC_DIR}/x86_64-linux-musl-native/bin/gcc
 RUN wget https://more.musl.cc/${CC_VERSION}/x86_64-linux-musl/x86_64-linux-musl-native.tgz
 RUN tar -xvzf x86_64-linux-musl-native.tgz
-# RUN cp /usr/lib/gcc/x86_64-redhat-linux/8/libstdc++.a ${BUILD_DIR}/x86_64-linux-musl-native/lib/
 
 WORKDIR ${WORK_DIR}
 RUN wget http://www.musl-libc.org/releases/musl-${MSUL_VERSION}.tar.gz
