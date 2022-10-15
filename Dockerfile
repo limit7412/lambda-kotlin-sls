@@ -24,7 +24,7 @@ RUN tar -xvzf x86_64-linux-musl-native.tgz
 
 WORKDIR ${WORK_DIR}
 RUN wget http://www.musl-libc.org/releases/musl-${MSUL_VERSION}.tar.gz
-RUN tar xzvf -${MSUL_VERSION}.tar.gz
+RUN tar xzvf musl-${MSUL_VERSION}.tar.gz
 WORKDIR ${WORK_DIR}/musl-${MSUL_VERSION}
 RUN ./configure --disable-shared --prefix=${BUILD_DIR}
 RUN make
