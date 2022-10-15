@@ -13,6 +13,7 @@ RUN microdnf install yum
 ENV LC_ALL C
 RUN yum -y install wget
 RUN mkdir ${CC_DIR}
+ENV PATH $PATH:${CC_DIR}/bin
 RUN mkdir ${BUILD_DIR}
 RUN mkdir ${WORK_DIR}
 ENV PATH $PATH:${BUILD_DIR}/bin
