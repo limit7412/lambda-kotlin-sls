@@ -19,6 +19,7 @@ ENV PATH $PATH:${BUILD_DIR}/bin
 
 WORKDIR ${CC_DIR}
 ENV CC ${CC_DIR}/x86_64-linux-musl-native/bin/gcc
+ENV PATH $PATH:${CC_DIR}/x86_64-linux-musl-native/bin
 RUN wget https://more.musl.cc/${CC_VERSION}/x86_64-linux-musl/x86_64-linux-musl-native.tgz
 RUN tar -xvzf x86_64-linux-musl-native.tgz
 
