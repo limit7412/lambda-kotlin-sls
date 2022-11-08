@@ -1,4 +1,3 @@
-
 service: lambda-kotlin-sls
 
 custom:
@@ -13,7 +12,8 @@ provider:
     images:
       appImage:
         path: ./
-  stage: ${opt:, self:custom.defaultStage}
+        platform: linux/amd64
+  stage: ${opt:stage, self:custom.defaultStage}
   # environment:
   #   ${file(./env.yml)}
 
