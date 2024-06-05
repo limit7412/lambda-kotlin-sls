@@ -1,38 +1,39 @@
 plugins {
-    application
-    kotlin("multiplatform") version "1.7.20"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
+//    id("io.ktor.plugin") version "2.3.11"
+    id("org.graalvm.buildtools.native") version "0.9.25"
 }
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
+}
+
+dependencies {
+//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 kotlin {
-    val hostOs = System.getProperty("os.name")
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native")
-        hostOs == "Linux" -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
+//    jvmToolchain(21)
+}
 
-    nativeTarget.apply {
-        binaries {
-            executable {
-                entryPoint = "main"
-            }
+//application {
+//    mainClass.set("org.example.MainKt")
+//}
+
+graalvmNative {
+    binaries {
+        named("main") {
+            mainClass.set("org.example.MainKt")
+            buildArgs.addAll(listOf(
+                "--no-fallback",
+                "--static",
+                "--libc=musl",
+                "--enable-https"
+            ))
         }
-    }
-    sourceSets {
-        val nativeMain by getting {
-            dependencies {
-                implementation("io.ktor:ktor-client-core:2.1.3")
-                implementation("io.ktor:ktor-client-curl:2.1.3")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-            }
-        }
-        val nativeTest by getting
     }
 }
