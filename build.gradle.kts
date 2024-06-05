@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
-//    id("io.ktor.plugin") version "2.3.11"
     id("org.graalvm.buildtools.native") version "0.9.25"
 }
 
@@ -13,16 +12,13 @@ repositories {
 }
 
 dependencies {
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 kotlin {
 //    jvmToolchain(21)
 }
 
-//application {
-//    mainClass.set("org.example.MainKt")
-//}
 
 graalvmNative {
     binaries {

@@ -1,18 +1,20 @@
 package runtime.serverless
 
-//import kotlinx.serialization.Serializable
-//
-//@Serializable
-//data class LambdaResponse(
-//  val statusCode: Int,
-//  val body: String,
-//)
-//
-//@Serializable
-//data class ErrorResponse(
-//  val msg: String,
-//  val error: String,
-//)
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class LambdaResponse(
+  val statusCode: Int,
+  val body: String,
+)
+
+@Serializable
+data class ErrorResponse(
+  val msg: String,
+  val error: String,
+)
 
 object Lambda {
   inline fun handler(name: String, callback: (event: String) -> String): Lambda {
@@ -34,14 +36,17 @@ object Lambda {
 
         Http.post(
           "http://$api/2018-06-01/runtime/invocation/$requestID/error",
-          "{\"statusCode\":500, \"body\": \"test err\"}"
-//          LambdaResponse(
-//            statusCode=500,
-//            body=ErrorResponse(
-//              msg="Internal Lambda Error",
-//              error=e.message ?: "no error message"
-//            ).toString()
-//          ).toString()
+          Json.encodeToString(
+            LambdaResponse(
+              statusCode=500,
+              body= Json.encodeToString(
+                ErrorResponse(
+                  msg="Internal Lambda Error",
+                  error=e.message ?: "no error message"
+                )
+              )
+            )
+          )
         )
       }
     }
