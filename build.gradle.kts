@@ -1,29 +1,35 @@
 plugins {
-  java
-  kotlin("jvm") version "1.5.20"
-  id("org.mikeneck.graalvm-native-image") version "v1.4.0"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
+    id("org.graalvm.buildtools.native") version "0.9.25"
 }
 
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-  implementation("org.slf4j:slf4j-simple:1.7.28")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
-nativeImage {
-  graalVmHome = System.getenv("JAVA_HOME")
-  buildType { build ->
-    build.executable(main = "MainKt")
-  }
-  executableName = "bootstrap"
-  outputDirectory = file("$buildDir/executable")
-  arguments(
-    "--no-fallback",
-    "--static",
-    "--libc=musl",
-    "--enable-https"
-  )
+kotlin {
+//    jvmToolchain(21)
+}
+
+
+graalvmNative {
+    binaries {
+        named("main") {
+            mainClass.set("org.example.MainKt")
+            buildArgs.addAll(listOf(
+                "--no-fallback",
+                "--static",
+                "--libc=musl",
+                "--enable-https"
+            ))
+        }
+    }
 }

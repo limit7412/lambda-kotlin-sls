@@ -7,12 +7,12 @@ import java.net.http.HttpResponse
 
 object Http {
   fun get(url: String): HttpResponse<String> {
-    var request = HttpRequest
+    val request = HttpRequest
       .newBuilder()
       .uri(URI.create(url))
       .GET()
       .build()
-    var response = HttpClient
+    val response = HttpClient
       .newHttpClient()
       .send(request, HttpResponse.BodyHandlers.ofString())
 
@@ -20,13 +20,13 @@ object Http {
   }
 
   fun post(url: String, body: String): HttpResponse<String> {
-    var request = HttpRequest
+    val request = HttpRequest
       .newBuilder()
       .uri(URI.create(url))
       .headers("Content-Type", "application/json;charset=UTF-8")
       .POST(HttpRequest.BodyPublishers.ofString(body))
       .build()
-    var response = HttpClient
+    val response = HttpClient
       .newHttpClient()
       .send(request, HttpResponse.BodyHandlers.ofString())
 
