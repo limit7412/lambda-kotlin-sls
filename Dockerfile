@@ -1,4 +1,4 @@
-FROM ghcr.io/graalvm/native-image-community:21-muslib as build-image
+FROM ghcr.io/graalvm/native-image-community:22-muslib as build-image
 
 WORKDIR /work
 COPY ./ ./
