@@ -1,4 +1,10 @@
 
+node_modules/
+
+bootstrap
+
+env.yml
+
 .gradle/
 
 .idea/workspace.xml

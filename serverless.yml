@@ -1,38 +1,89 @@
 service: lambda-kotlin-sls
 
+plugins:
+  - serverless-plugin-scripts
+
 custom:
   defaultStage: dev
+  scripts:
+    hooks:
+      # sls deploy / sls package 時に bootstrap を静的ビルドする。
+      # macOS / Apple Silicon でも Lambda(provided.al2, x86_64) 互換の
+      # 静的バイナリを得るため、linux/amd64 を明示して Docker でビルドする。
+      # GraalVM native-image を musl で静的リンクし、生成物を bootstrap に
+      # リネームしてパッケージ直下へ配置する。
+      'before:package:createDeploymentArtifacts': |
+        docker run --rm --platform linux/amd64 -v "$PWD":/work -w /work ghcr.io/graalvm/native-image-community:22-muslib \
+          sh -c "microdnf install -y findutils && ./gradlew clean nativeCompile && cp ./build/native/nativeCompile/lambda-kotlin-sls bootstrap && chmod +x bootstrap"
 
 provider:
   name: aws
-  runtime: provided
+  runtime: provided.al2
   timeout: 20
   region: ap-northeast-1
-  ecr:
-    images:
-      appImage:
-        path: ./
-        platform: linux/amd64
   stage: ${opt:stage, self:custom.defaultStage}
   # environment:
   #   ${file(./env.yml)}
 
+package:
+  patterns:
+    - '!./**'
+    - bootstrap
+
 functions:
+  # provided ランタイムはパッケージ直下の bootstrap を実行する。
+  # handler 文字列は _HANDLER として渡され、src/main/kotlin/main.kt の
+  # Lambda.handler("...") と一致させることで処理を振り分ける。
   hello:
-    image:
-      name: appImage
-      command:
-        - hello
+    handler: hello
     events:
       - http:
           path: test
           method: get
   world:
-    image:
-      name: appImage
-      command:
-        - world
+    handler: world
     events:
       - http:
           path: test
           method: post
+
+# =====================================================================
+# Docker(ECR イメージ)版【旧構成・参考用にコメントアウトで残す】
+# ---------------------------------------------------------------------
+# Dockerfile から ECR イメージをビルドし、image.command で各関数の
+# _HANDLER を切り替えていた。zip 版へ移行したため無効化。
+# ---------------------------------------------------------------------
+# provider:
+#   name: aws
+#   runtime: provided
+#   timeout: 20
+#   region: ap-northeast-1
+#   ecr:
+#     images:
+#       appImage:
+#         path: ./
+#         platform: linux/amd64
+#   stage: ${opt:stage, self:custom.defaultStage}
+#   # environment:
+#   #   ${file(./env.yml)}
+#
+# functions:
+#   hello:
+#     image:
+#       name: appImage
+#       command:
+#         - hello
+#     events:
+#       - http:
+#           path: test
+#           method: get
+#   world:
+#     image:
+#       name: appImage
+#       command:
+#         - world
+#     events:
+#       - http:
+#           path: test
+#           method: post
+# =====================================================================
