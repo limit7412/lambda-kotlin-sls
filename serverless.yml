@@ -12,9 +12,10 @@ custom:
       # 静的バイナリを得るため、linux/amd64 を明示して Docker でビルドする。
       # GraalVM native-image を musl で静的リンクし、生成物を bootstrap に
       # リネームしてパッケージ直下へ配置する。
+      # GraalVM イメージは ENTRYPOINT が native-image のため --entrypoint sh で上書きする。
       'before:package:createDeploymentArtifacts': |
-        docker run --rm --platform linux/amd64 -v "$PWD":/work -w /work ghcr.io/graalvm/native-image-community:22-muslib \
-          sh -c "microdnf install -y findutils && ./gradlew clean nativeCompile && cp ./build/native/nativeCompile/lambda-kotlin-sls bootstrap && chmod +x bootstrap"
+        docker run --rm --platform linux/amd64 --entrypoint sh -v "$PWD":/work -w /work ghcr.io/graalvm/native-image-community:22-muslib \
+          -c "microdnf install -y findutils && ./gradlew clean nativeCompile && cp ./build/native/nativeCompile/lambda-kotlin-sls bootstrap && chmod +x bootstrap"
 
 provider:
   name: aws
