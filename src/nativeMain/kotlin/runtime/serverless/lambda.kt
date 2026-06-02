@@ -43,37 +43,39 @@ object Lambda {
       ignoreUnknownKeys = true
     }
 
-    while (true) {
-      // Runtime API のポーリングは Ktor client(suspend) を runBlocking で同期実行する。
-      // reified T を使った decode はインライン関数本体で行う必要があるため、
-      // suspend なネットワーク呼び出しと JSON 変換のスコープを分離している。
-      val (requestID, rawBody) = runBlocking {
+    // Runtime API のポーリングループ全体を 1 つの runBlocking で囲み、
+    // イテレーション毎にコルーチンイベントループを生成・破棄するオーバーヘッドを避ける。
+    // reified T を使った decode も runBlocking のブロックは inline 関数 handler の
+    // スコープ内にあるため、ここで直接呼び出せる。
+    runBlocking {
+      while (true) {
         val response = Http.get("http://$api/2018-06-01/runtime/invocation/next")
-        val id = response.headers["Lambda-Runtime-Aws-Request-Id"]
-        id to response.bodyAsText()
-      }
-
-      try {
-        val event = json.decodeFromString<T>(rawBody)
-        val resultJson = json.encodeToString(callback(event))
-        runBlocking {
-          Http.post("http://$api/2018-06-01/runtime/invocation/$requestID/response", resultJson)
+        val requestID = response.headers["Lambda-Runtime-Aws-Request-Id"]
+        if (requestID == null) {
+          // request id が取れない応答は不正なエンドポイントを叩く前にスキップする。
+          println("Error: Lambda-Runtime-Aws-Request-Id header is missing")
+          continue
         }
-      } catch (e: Exception) {
-        println(e)
+        val rawBody = response.bodyAsText()
 
-        val errorJson = json.encodeToString(
-          LambdaResponse(
-            statusCode = 500,
-            body = json.encodeToString(
-              ErrorResponse(
-                msg = "Internal Lambda Error",
-                error = e.message ?: "no error message"
+        try {
+          val event = json.decodeFromString<T>(rawBody)
+          val resultJson = json.encodeToString(callback(event))
+          Http.post("http://$api/2018-06-01/runtime/invocation/$requestID/response", resultJson)
+        } catch (e: Exception) {
+          println(e)
+
+          val errorJson = json.encodeToString(
+            LambdaResponse(
+              statusCode = 500,
+              body = json.encodeToString(
+                ErrorResponse(
+                  msg = "Internal Lambda Error",
+                  error = e.message ?: "no error message"
+                )
               )
             )
           )
-        )
-        runBlocking {
           Http.post("http://$api/2018-06-01/runtime/invocation/$requestID/error", errorJson)
         }
       }
