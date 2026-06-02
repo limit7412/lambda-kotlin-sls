@@ -1,12 +1,14 @@
 # lambda-kotlin-sls
 
-自力でシングルバイナリなサーバーレスkotlin作ってみたやつ by Graalvm
+自力でシングルバイナリなサーバーレスkotlin作ってみたやつ by Kotlin/Native
 
 要: Docker, Node.js, Serverless Framework
 
-zip(provided.al2)版で動作する。`sls deploy` 時に serverless-plugin-scripts の
-フックが GraalVM の Docker イメージで `nativeCompile` を実行し、生成された
-ネイティブバイナリを `bootstrap` にリネームして zip にパッケージングする。
+zip(provided.al2023 / arm64)版で動作する。`sls deploy` 時に serverless-plugin-scripts の
+フックが JDK 入りの Docker イメージで Kotlin/Native の
+`linkReleaseExecutableLinuxArm64` を実行し、生成された実行ファイル
+`bootstrap.kexe` を `bootstrap` にリネームして zip にパッケージングする。
+linuxArm64 は linuxX64 ホストからクロスコンパイルできるため QEMU は不要。
 
 ```bash
 # プラグインのインストール（初回のみ）
