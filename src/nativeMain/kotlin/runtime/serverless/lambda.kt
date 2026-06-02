@@ -33,7 +33,7 @@ data class ErrorResponse(
 )
 
 object Lambda {
-  inline fun <reified T> handler(name: String, callback: (event: T) -> LambdaResponse): Lambda {
+  inline fun <reified T> handler(name: String, crossinline callback: (event: T) -> LambdaResponse): Lambda {
     if (name != env("_HANDLER")) {
       return this
     }
