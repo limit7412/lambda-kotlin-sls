@@ -7,19 +7,20 @@ custom:
   defaultStage: dev
   scripts:
     hooks:
-      # sls deploy / sls package 時に bootstrap を静的ビルドする。
-      # macOS / Apple Silicon でも Lambda(provided.al2023, x86_64) 互換の
-      # 静的バイナリを得るため、linux/amd64 を明示して Docker でビルドする。
-      # GraalVM native-image を musl で静的リンクし、生成物を bootstrap に
+      # sls deploy / sls package 時に bootstrap を Kotlin/Native でビルドする。
+      # GraalVM native-image を廃し、Kotlin/Native で Lambda(provided.al2023,
+      # arm64) 向けの linuxArm64 実行ファイルを生成する。linuxArm64 は
+      # linuxX64 ホストからクロスコンパイル可能なため QEMU は不要。OS 非依存に
+      # 再現するため JDK 入りの Docker でビルドし、生成物を bootstrap に
       # リネームしてパッケージ直下へ配置する。
-      # GraalVM イメージは ENTRYPOINT が native-image のため --entrypoint sh で上書きする。
       'before:package:createDeploymentArtifacts': |
-        docker run --rm --platform linux/amd64 --entrypoint sh -v "$PWD":/work -w /work ghcr.io/graalvm/native-image-community:22-muslib \
-          -c "microdnf install -y findutils && ./gradlew clean nativeCompile && cp ./build/native/nativeCompile/lambda-kotlin-sls bootstrap && chmod +x bootstrap"
+        docker run --rm -v "$PWD":/work -w /work eclipse-temurin:21-jdk \
+          sh -c "./gradlew clean linkReleaseExecutableLinuxArm64 && cp ./build/bin/linuxArm64/releaseExecutable/bootstrap.kexe bootstrap && chmod +x bootstrap"
 
 provider:
   name: aws
   runtime: provided.al2023
+  architecture: arm64
   timeout: 20
   region: ap-northeast-1
   stage: ${opt:stage, self:custom.defaultStage}
