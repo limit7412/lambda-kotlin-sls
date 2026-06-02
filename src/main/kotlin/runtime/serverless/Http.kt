@@ -1,35 +1,22 @@
 package runtime.serverless
 
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 
 object Http {
-  fun get(url: String): HttpResponse<String> {
-    val request = HttpRequest
-      .newBuilder()
-      .uri(URI.create(url))
-      .GET()
-      .build()
-    val response = HttpClient
-      .newHttpClient()
-      .send(request, HttpResponse.BodyHandlers.ofString())
+  private val client = HttpClient(CIO)
 
-    return response
-  }
+  suspend fun get(url: String): HttpResponse = client.get(url)
 
-  fun post(url: String, body: String): HttpResponse<String> {
-    val request = HttpRequest
-      .newBuilder()
-      .uri(URI.create(url))
-      .headers("Content-Type", "application/json;charset=UTF-8")
-      .POST(HttpRequest.BodyPublishers.ofString(body))
-      .build()
-    val response = HttpClient
-      .newHttpClient()
-      .send(request, HttpResponse.BodyHandlers.ofString())
-
-    return response
-  }
+  suspend fun post(url: String, body: String): HttpResponse =
+    client.post(url) {
+      contentType(ContentType.parse("application/json;charset=UTF-8"))
+      setBody(body)
+    }
 }
