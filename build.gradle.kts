@@ -1,7 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.0.0"
+    kotlin("multiplatform") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
-    id("org.graalvm.buildtools.native") version "0.9.25"
 }
 
 group = "org.example"
@@ -13,28 +12,26 @@ repositories {
 
 val ktorVersion = "2.3.12"
 
-dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-}
-
 kotlin {
-//    jvmToolchain(21)
-}
+    // Lambda(provided.al2023, x86_64) 向けに Kotlin/Native で単一実行ファイルを生成する。
+    // 生成物 build/bin/linuxX64/releaseExecutable/bootstrap.kexe を bootstrap として配置する。
+    linuxX64 {
+        binaries {
+            executable {
+                entryPoint = "org.example.main"
+                baseName = "bootstrap"
+            }
+        }
+    }
 
-
-graalvmNative {
-    binaries {
-        named("main") {
-            mainClass.set("org.example.MainKt")
-            buildArgs.addAll(listOf(
-                "--no-fallback",
-                "--static",
-                "--libc=musl",
-                "--enable-https"
-            ))
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+            }
         }
     }
 }

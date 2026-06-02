@@ -1,10 +1,19 @@
 package runtime.serverless
 
 import io.ktor.client.statement.bodyAsText
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.toKString
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import platform.posix.getenv
+
+// Kotlin/Native では System.getenv が使えないため posix の getenv をラップする。
+// inline 関数 handler から参照するため @PublishedApi internal で公開する。
+@OptIn(ExperimentalForeignApi::class)
+@PublishedApi
+internal fun env(name: String): String = getenv(name)?.toKString() ?: ""
 
 @Serializable
 data class LambdaAPIGatewayRequest(
@@ -25,11 +34,11 @@ data class ErrorResponse(
 
 object Lambda {
   inline fun <reified T> handler(name: String, callback: (event: T) -> LambdaResponse): Lambda {
-    if (name != System.getenv("_HANDLER").toString()) {
+    if (name != env("_HANDLER")) {
       return this
     }
 
-    val api = System.getenv("AWS_LAMBDA_RUNTIME_API").toString()
+    val api = env("AWS_LAMBDA_RUNTIME_API")
     val json = Json {
       ignoreUnknownKeys = true
     }
