@@ -4,10 +4,11 @@
 
 要: Docker, Node.js, Serverless Framework
 
-zip(provided.al2023)版で動作する。`sls deploy` 時に serverless-plugin-scripts の
+zip(provided.al2023 / arm64)版で動作する。`sls deploy` 時に serverless-plugin-scripts の
 フックが JDK 入りの Docker イメージで Kotlin/Native の
-`linkReleaseExecutableLinuxX64` を実行し、生成された実行ファイル
+`linkReleaseExecutableLinuxArm64` を実行し、生成された実行ファイル
 `bootstrap.kexe` を `bootstrap` にリネームして zip にパッケージングする。
+linuxArm64 は linuxX64 ホストからクロスコンパイルできるため QEMU は不要。
 
 ```bash
 # プラグインのインストール（初回のみ）

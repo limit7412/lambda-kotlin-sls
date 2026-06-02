@@ -9,16 +9,18 @@ custom:
     hooks:
       # sls deploy / sls package 時に bootstrap を Kotlin/Native でビルドする。
       # GraalVM native-image を廃し、Kotlin/Native で Lambda(provided.al2023,
-      # x86_64) 向けの linuxX64 実行ファイルを生成する。OS 非依存に再現するため
-      # JDK 入りの Docker でビルドし、生成物を bootstrap にリネームして
-      # パッケージ直下へ配置する。
+      # arm64) 向けの linuxArm64 実行ファイルを生成する。linuxArm64 は
+      # linuxX64 ホストからクロスコンパイル可能なため QEMU は不要。OS 非依存に
+      # 再現するため JDK 入りの Docker でビルドし、生成物を bootstrap に
+      # リネームしてパッケージ直下へ配置する。
       'before:package:createDeploymentArtifacts': |
         docker run --rm -v "$PWD":/work -w /work eclipse-temurin:21-jdk \
-          sh -c "./gradlew clean linkReleaseExecutableLinuxX64 && cp ./build/bin/linuxX64/releaseExecutable/bootstrap.kexe bootstrap && chmod +x bootstrap"
+          sh -c "./gradlew clean linkReleaseExecutableLinuxArm64 && cp ./build/bin/linuxArm64/releaseExecutable/bootstrap.kexe bootstrap && chmod +x bootstrap"
 
 provider:
   name: aws
   runtime: provided.al2023
+  architecture: arm64
   timeout: 20
   region: ap-northeast-1
   stage: ${opt:stage, self:custom.defaultStage}
